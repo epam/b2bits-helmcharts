@@ -7,7 +7,7 @@ This is the Official EPAM B2Bits Helm chart for installing and configuring FIXEd
 
 ```
 $ kubectl create secret generic license-file --from-file=path/to/engine.license
-$ helm repo add b2bits https://morozandralek.github.io/helmcharts
+$ helm repo add b2bits https://epam.github.io/b2bits-helmcharts
 $ helm install my-fixedge b2bits/fixedge
 ```
 
@@ -33,7 +33,7 @@ To install the chart with the release name `my-fixedge`:
 
 ```
 $ kubectl create secret generic license-file --from-file=path/to/engine.license
-$ helm repo add b2bits https://morozandralek.github.io/helmcharts
+$ helm repo add b2bits https://epam.github.io/b2bits-helmcharts
 $ helm install my-fixedge b2bits/fixedge
 ```
 
@@ -95,7 +95,7 @@ $ helm install my-fixedge -f values.yaml b2bits/fixedge
 
 ### Using custom configuration
 
-By default this helm chart clones FIXEdge configuration from `https://morozandralek.github.io/fixedge`.
+By default this helm chart clones FIXEdge configuration from `https://github.com/epam/b2bits-configuration-samples/tree/main/fixedge`.
 
 If you choose to maintain your custom FIXEdge configuration in private Git repository, you shuold provide SSH details for access to remote repository:
 ```

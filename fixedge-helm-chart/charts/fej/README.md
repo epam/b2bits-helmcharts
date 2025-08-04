@@ -8,7 +8,7 @@ This is the Official EPAM B2Bits Helm chart for installing and configuring FIXEd
 ```
 $ kubectl create secret generic fixaj2-java-license-file --from-file=path/to/fixaj2-license.bin
 $ kubectl create secret generic fixedge-java-license-file --from-file=path/to/fixedgej-license.bin
-$ helm repo add b2bits https://morozandralek.github.io/helmcharts
+$ helm repo add b2bits https://epam.github.io/b2bits-helmcharts
 $ helm install my-fixedge-java b2bits/fixedge-java
 ```
 
@@ -35,7 +35,7 @@ To install the chart with the release name `my-fixedge-java`:
 ```
 $ kubectl create secret generic fixaj2-java-license-file --from-file=path/to/fixaj2-license.bin
 $ kubectl create secret generic fixedge-java-license-file --from-file=path/to/fixedgej-license.bin
-$ helm repo add b2bits https://morozandralek.github.io/helmcharts
+$ helm repo add b2bits https://epam.github.io/b2bits-helmcharts
 $ helm install my-fixedge-java b2bits/fixedge-java
 ```
 

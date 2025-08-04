@@ -7,7 +7,7 @@ imagePullSecrets: []
 
 fixedge:
   image:
-    url: morozandralek/fixedge
+    url: b2bitsepam/fixedge-cpp
     version: latest
     imagePullPolicy: Always
   port: 8901
