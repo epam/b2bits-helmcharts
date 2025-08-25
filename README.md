@@ -5,7 +5,7 @@ FIX server FIXEdge is an application server providing FIX connectivity to multip
 
 ### Get Repo Info
 
-    helm repo add fixedge https://morozandralek.github.io/helmcharts
+    helm repo add fixedge https://epam.github.io/b2bits-helmcharts
     helm repo update
 
 *See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation.*
