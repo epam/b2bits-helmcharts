@@ -3,6 +3,16 @@ entries:
   fixedge:
   - apiVersion: v2
     appVersion: latest
+    created: "2025-08-25T12:12:37.155800065Z"
+    description: A Helm chart for Kubernetes
+    digest: 6b82fe9116f5f6398c77a5e0b848673e505bf9149fd8898fab66996891e58065
+    name: fixedge
+    type: application
+    urls:
+    - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-0.1.19/fixedge-0.1.19.tgz
+    version: 0.1.19
+  - apiVersion: v2
+    appVersion: latest
     created: "2025-08-04T11:51:35.881666526Z"
     description: A Helm chart for Kubernetes
     digest: e04b5f7769bde289857cb11f1f628dadffbb06b84e5761db6046ab0c20cc1ae5
