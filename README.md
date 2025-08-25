@@ -5,7 +5,7 @@ Applications, provided by [B2BITS®, EPAM's Capital Markets Competency Center](h
 ## Quickstart
 
 ```
-$ helm repo add b2bits https://morozandralek.github.io/helmcharts
+$ helm repo add b2bits https://epam.github.io/b2bits-helmcharts/
 $ helm search repo b2bits
 $ helm install my-release b2bits/<chart>
 ```
@@ -35,7 +35,7 @@ To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#
 
 The following command allows you to download and install all the charts from this repository:
 
-`$ helm repo add b2bits https://morozandralek.github.io/helmcharts`
+`$ helm repo add b2bits https://epam.github.io/b2bits-helmcharts/`
 
 ### Using Helm
 
