@@ -109,7 +109,7 @@ $ helm install my-fixedge --set git_configs.url=<your-git-repo-ssh-url>,git_conf
 It is expected that all FIXEdge configuration files are grouped under `fixedge` folder in your repository.
 
 ## Persistence
-The [EPAM B2Bits FIXEdge](https://hub.docker.com/r/morozandralek/fixedge) image stores the FIXEdge data at the `/var/lib/fixedge` path of the container.
+The [EPAM B2Bits FIXEdge](https://hub.docker.com/r/b2bitsepam/fixedge-cpp) image stores the FIXEdge data at the `/var/lib/fixedge` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in AWS, minikube and k3s.
 See the [Parameters](#parameters) section to configure the PVC.
