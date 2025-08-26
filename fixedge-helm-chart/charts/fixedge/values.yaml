@@ -1,3 +1,6 @@
+# FIXEdge subchart values
+# These values can be overridden from the parent chart
+
 force_init_configs: false
 git_configs:
   url: https://github.com/epam/b2bits-configuration-samples.git
@@ -31,7 +34,7 @@ fixedge:
     # The StorageClass to use for the servers' StatefulSet storage. 
     # Empty value will use the Kubernetes cluster's default StorageClass. If a default
     # StorageClass does not exist, you will need to create one.
-    # A `store-aws-ebs-fe` value will register StorageClass based on AWS EBS, which is 
+    # A `store-aws-ebs-fe` version: 0.1.20
     # suitable for deployment in EKS - see templates/storageclass.yaml for details.
     class: "gp2"
     accessModes: ReadWriteOnce

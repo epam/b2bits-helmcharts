@@ -1,3 +1,6 @@
+# FIXEdge Java subchart values
+# These values can be overridden from the parent chart
+
 force_init_configs: false
 git_configs:
   url: https://github.com/epam/b2bits-configuration-samples.git
@@ -5,26 +8,39 @@ git_configs:
 
 imagePullSecrets: []
 
-global:
-  fixedge_java:
-    image:
-      url: b2bitsepam/fixedge-java
-      version: latest
-      imagePullPolicy: Always
-    port: 8901
-    httpAdmPort: 8911
-    livenessProbe:
-      initialDelaySeconds: 15
-      periodSeconds: 20
-    resources:
-      requests:
-        cpu: 0.5
-        memory: 1Gi
-      limits:
-        cpu: 0.5
-        memory: 1Gi
-
+fixedge_java:
+  image:
+    url: b2bitsepam/fixedge-java
+    version: latest
+    imagePullPolicy: Always
+  port: 8911
+  httpAdmPort: 9010
+  livenessProbe:
+    initialDelaySeconds: 15
+    periodSeconds: 20
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 1Gi
+    limits:
+      cpu: 0.5
+      memory: 1Gi
   storage:
+    # The StorageClass to use for the servers' StatefulSet storage. 
+    # Empty value will use the Kubernetes cluster's default StorageClass. If a default
+    # StorageClass does not exist, you will need to create one.
+    # A `store-aws-ebs-fe` value will register StorageClass based on AWS EBS, which is 
+    # suitable for deployment in EKS - see templates/storageclass.yaml for details.
+    class: "gp2"
     accessModes: ReadWriteOnce
-    fe_java_session_logs:
+    fe_java_configs:
+      size: 1Gi
+    fe_java_sessions_logs:
+      size: 10Gi
+    fe_java_app_logs:
       size: 10Gi

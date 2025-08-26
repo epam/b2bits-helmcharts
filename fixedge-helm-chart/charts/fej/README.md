@@ -61,22 +61,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | force_init_configs                            | Update config on re-deploy                                       | false                                              |
 | git_configs.url                               | Repository with configuration for FIXEdge Java                   | https://github.com/epam/b2bits-configuration-samples.git |
 | git_configs.branch                            | Branch from the config repository                                | main                                               |
-| global.fixedge_java.image.url                 | Docker image URL for FIXEdge Java                                | b2bitsepam/fixedge-java                            |
-| global.fixedge_java.image.version             | Docker image version                                             | 1.10.4                                             |
-| global.fixedge_java.image.imagePullPolicy     | Image pull policy                                                | Always                                             |
-| global.fixedge_java.port                      | FIXEdge Java port                                                | 8901                                               |
-| global.fixedge_java.httpAdmPort               | FIXEdge Java HTTP admin port                                     | 8911                                               |
-| global.fixedge_java.resources.requests.cpu    | CPU request                                                      | 0.5                                                |
-| global.fixedge_java.resources.requests.memory | Memory request                                                   | 1Gi                                                |
-| global.fixedge_java.resources.limits.cpu      | CPU limit                                                        | 0.5                                                |
-| global.fixedge_java.resources.limits.memory   | Memory limit                                                     | 1Gi                                                |
-| global.storage.accessModes                    | Storage access mode                                              | ReadWriteOnce                                      |
-| global.storage.fe_java_session_logs.size      | Session logs storage size                                        | 10Gi                                               |
+| fixedge_java.image.url                        | Docker image URL for FIXEdge Java                                | b2bitsepam/fixedge-java                            |
+| fixedge_java.image.version                    | Docker image version                                             | latest                                             |
+| fixedge_java.image.imagePullPolicy            | Image pull policy                                                | Always                                             |
+| fixedge_java.port                             | FIXEdge Java port                                                | 8901                                               |
+| fixedge_java.httpAdmPort                      | FIXEdge Java HTTP admin port                                     | 8911                                               |
+| fixedge_java.resources.requests.cpu           | CPU request                                                      | 0.5                                                |
+| fixedge_java.resources.requests.memory        | Memory request                                                   | 1Gi                                                |
+| fixedge_java.resources.limits.cpu             | CPU limit                                                        | 0.5                                                |
+| fixedge_java.resources.limits.memory          | Memory limit                                                     | 1Gi                                                |
+| fixedge_java.storage.class                    | Storage class                                                    | gp2                                                |
+| fixedge_java.storage.accessModes              | Storage access mode                                              | ReadWriteOnce                                      |
+| fixedge_java.storage.fe_java_configs.size     | Configuration storage size                                       | 1Gi                                                |
+| fixedge_java.storage.fe_java_sessions_logs.size | Session logs storage size                                     | 10Gi                                               |
+| fixedge_java.storage.fe_java_app_logs.size    | Application logs storage size                                    | 10Gi                                               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-fixedge-java --set force_init_configs=true,fixedge.resources.limits.memory=800Mi b2bits/fixedge-java
+$ helm install my-fixedge-java --set force_init_configs=true,fixedge_java.resources.limits.memory=800Mi b2bits/fixedge-java
 ```
 
 The above command forces pull configuration on start (`force_init_configs=true`) and sets RAM limit to `800Mi`.
@@ -95,7 +98,7 @@ $ helm install my-fixedge-java -f values.yaml b2bits/fixedge-java
 
 ### Using custom configuration
 
-By default this helm chart clones FIXEdge configuration from `https://morozandralek.github.io/fixedge`.
+By default this helm chart clones FIXEdge configuration from `https://epam.github.io/b2bits-helmcharts`.
 
 If you choose to maintain your custom FIXEdge configuration in private Git repository, you shuold provide SSH details for access to remote repository:
 ```

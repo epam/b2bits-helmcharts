@@ -1,9 +1,23 @@
 apiVersion: v2
-name: fixedge-java
-description: A Helm chart for Kubernetes
+name: fej
+description: A Helm chart for Kubernetes FIXEdge Java application
 
 type: application
 
-version: 0.1.4
-
+version: 0.1.5
 appVersion: "latest"
+
+keywords:
+  - fixedge-java
+  - fix
+  - trading
+  - financial
+  - java
+
+home: https://github.com/epam/b2bits-helmcharts
+sources:
+  - https://github.com/epam/b2bits-helmcharts
+
+maintainers:
+  - name: EPAM
+    email: SupportFIXAntenna@epam.com
