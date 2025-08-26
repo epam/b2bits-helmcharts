@@ -6,6 +6,7 @@ metadata:
   name: fixedge-java
   namespace: {{ .Release.Namespace }}
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: fixedge-java
@@ -17,39 +18,153 @@ spec:
         service: fixedge-java
     spec:
       volumes:
-      - name: fixedge-java-configmap-files
-        configMap:
-          name: fixedge-java-configmap-files
+      - name: cache-volume
+        emptyDir: {}
+      - name: fixedge-java-configs-data
+        persistentVolumeClaim:
+          claimName: fixedge-java-configs-pvc
+      - name: fixedge-java-session-logs-data
+        persistentVolumeClaim:
+          claimName: fixedge-java-session-logs-pvc
+      - name: fixedge-java-app-logs-data
+        persistentVolumeClaim:
+          claimName: fixedge-java-app-logs-pvc
       - name: fixaj2-license-file
         secret:
           secretName: fixaj2-java-license-file
       - name: fixedge-java-license-file
         secret:
           secretName: fixedge-java-license-file
-      - name: fixedge-java-session-logs-data
-        persistentVolumeClaim:
-          claimName: fixedge-java-session-logs-pvc
+      - name: ssh-creds-files
+        secret:
+          secretName: ssh-creds
+          optional: true
+          defaultMode: 256
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: fixedge-java
-        image: {{ .Values.global.fixedge_java.image.url }}:{{ .Values.global.fixedge_java.image.version }}
+        image: {{ .Values.fixedge_java.image.url }}:{{ .Values.fixedge_java.image.version }}
         resources:
-{{ toYaml .Values.global.fixedge_java.resources | indent 10 }}
-        imagePullPolicy: {{ .Values.global.fixedge_java.image.imagePullPolicy }}
+{{ toYaml .Values.fixedge_java.resources | indent 10 }}
+        imagePullPolicy: {{ .Values.fixedge_java.image.imagePullPolicy }}
         ports:
-        - containerPort: {{ .Values.global.fixedge_java.port }}
+        - containerPort: {{ .Values.fixedge_java.port }}
           protocol: TCP
-        - containerPort: {{ .Values.global.fixedge_java.httpAdmPort }}
+        - containerPort: {{ .Values.fixedge_java.httpAdmPort }}
           protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.fixedge_java.httpAdmPort }}
+          initialDelaySeconds: {{ .Values.fixedge_java.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.fixedge_java.livenessProbe.periodSeconds }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.fixedge_java.port }}
+          initialDelaySeconds: {{ .Values.fixedge_java.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.fixedge_java.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.fixedge_java.readinessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.fixedge_java.readinessProbe.failureThreshold }}
         volumeMounts:
-        - name: fixedge-java-session-logs-data
-          mountPath: /var/lib/fixedge-java
-        - name: fixedge-java-configmap-files
-          mountPath: /etc/fixedge-java/fixedge.properties
-          subPath: fixedge.properties
         - name: fixaj2-license-file
           mountPath: /etc/fixedge-java/fixaj2-license.bin
           subPath: fixaj2-license.bin
         - name: fixedge-java-license-file
           mountPath: /etc/fixedge-java/fixedgej-license.bin
           subPath: fixedgej-license.bin
+        - name: fixedge-java-configs-data
+          mountPath: /etc/fixedge-java
+        - name: fixedge-java-session-logs-data
+          mountPath: /var/lib/fixedge-java
+        - name: fixedge-java-app-logs-data
+          mountPath: /var/log/fixedge-java
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+      - name: clean-archive
+        image: busybox:1.28
+        resources:
+          requests:
+            cpu: 0.2
+            memory: 100Mi
+          limits:
+            cpu: 0.2
+            memory: 100Mi
+        command: ['sh', '-c', 'while true; do find /var/lib/fixedge-java/archive -name "*.log" -mtime +7 -delete 2>/dev/null || true; sleep 24h; done']
+        volumeMounts: 
+        - name: fixedge-java-session-logs-data
+          mountPath: /var/lib/fixedge-java
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+      initContainers:
+        - name: git-cloner
+          image: alpine/git
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 100Mi
+            limits:
+              cpu: 0.2
+              memory: 100Mi
+          args:
+              - clone
+              - --single-branch
+              - --branch
+              - {{ .Values.git_configs.branch }}
+              - --
+              - {{ .Values.git_configs.url }}
+              - /mnt/fe-configs/data
+          volumeMounts: 
+            - name: "ssh-creds-files"
+              mountPath: "/root/.ssh"
+            - name: cache-volume
+              mountPath: "/mnt/fe-configs"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+        - name: copy-configs
+          image: busybox:1.28
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 100Mi
+            limits:
+              cpu: 0.2
+              memory: 100Mi
+          env:          
+            - name: "force_init_configs"
+              value: {{ .Values.force_init_configs | squote }}
+          command: ['sh', '-c', '[[ "${force_init_configs}" == "true" || ! -f "/etc/fixedge-java/fixedge.properties" ]] && cp -R /mnt/fe-configs/data/fixedge-java/* /etc/fixedge-java && echo "Copy configs - done." || echo "/etc/fixedge-java/fixedge.properties already exists, skip copying..."']
+          volumeMounts: 
+            - name: cache-volume
+              mountPath: "/mnt/fe-configs"
+            - name: fixedge-java-configs-data
+              mountPath: /etc/fixedge-java
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+        - name: dirs-init
+          image: busybox:1.28
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 100Mi
+            limits:
+              cpu: 0.2
+              memory: 100Mi
+          command: ['sh', '-c', 'mkdir -p /var/lib/fixedge-java/archive']
+          volumeMounts: 
+            - name: fixedge-java-session-logs-data
+              mountPath: /var/lib/fixedge-java
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
 

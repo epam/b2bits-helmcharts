@@ -3,11 +3,48 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: fixedge-java-configs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixedge_java.storage.accessModes }}
+  {{- if .Values.fixedge_java.storage.class }}
+  storageClassName: {{ .Values.fixedge_java.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixedge_java.storage.fe_java_configs.size }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: fixedge-java-session-logs-pvc
   namespace: {{ .Release.Namespace }}
 spec:
   accessModes:
-    - {{ .Values.global.storage.accessModes }}
+    - {{ .Values.fixedge_java.storage.accessModes }}
+  {{- if .Values.fixedge_java.storage.class }}
+  storageClassName: {{ .Values.fixedge_java.storage.class }}
+  {{- end }}
   resources:
     requests:
-      storage: {{ .Values.global.storage.fe_java_session_logs.size }}
+      storage: {{ .Values.fixedge_java.storage.fe_java_sessions_logs.size }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixedge-java-app-logs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixedge_java.storage.accessModes }}
+  {{- if .Values.fixedge_java.storage.class }}
+  storageClassName: {{ .Values.fixedge_java.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixedge_java.storage.fe_java_app_logs.size }}
