@@ -6,6 +6,7 @@ metadata:
   name: fixedge
   namespace: {{ .Release.Namespace }}
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: fixedge
@@ -56,6 +57,13 @@ spec:
             port: {{ .Values.fixedge.httpAdmPort }}
           initialDelaySeconds: {{ .Values.fixedge.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.fixedge.livenessProbe.periodSeconds }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.fixedge.port }}
+          initialDelaySeconds: {{ .Values.fixedge.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.fixedge.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.fixedge.readinessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.fixedge.readinessProbe.failureThreshold }}
         volumeMounts:
         - name: fe-license-file
           mountPath: /etc/fixedge/engine.license
@@ -67,8 +75,6 @@ spec:
         - name: fixedge-app-logs-data
           mountPath: /var/log/fixedge
         securityContext:
-          runAsNonRoot: true
-          readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
           capabilities:
             drop: ["ALL"]
@@ -81,13 +87,11 @@ spec:
           limits:
             cpu: 0.2
             memory: 100Mi
-        command: ['sh', '-c', 'while true; do rm -f * /var/lib/fixedge/archive/*; sleep 24h; done']
+        command: ['sh', '-c', 'while true; do find /var/lib/fixedge/archive -name "*.log" -mtime +7 -delete 2>/dev/null || true; sleep 24h; done']
         volumeMounts: 
         - name: fixedge-session-logs-data
           mountPath: /var/lib/fixedge
         securityContext:
-          runAsNonRoot: true
-          readOnlyRootFilesystem: true
           allowPrivilegeEscalation: false
           capabilities:
             drop: ["ALL"]
@@ -115,8 +119,6 @@ spec:
             - name: cache-volume
               mountPath: "/mnt/fe-configs"
           securityContext:
-            runAsNonRoot: true
-            readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
@@ -139,8 +141,6 @@ spec:
             - name: fixedge-configs-data
               mountPath: /etc/fixedge
           securityContext:
-            runAsNonRoot: true
-            readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
@@ -158,8 +158,6 @@ spec:
             - name: fixedge-session-logs-data
               mountPath: /var/lib/fixedge
           securityContext:
-            runAsNonRoot: true
-            readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]

@@ -1,9 +1,22 @@
 apiVersion: v2
 name: fixedge
-description: A Helm chart for Kubernetes
+description: A Helm chart for Kubernetes FIXEdge application
 
 type: application
 
-version: 0.1.19
-
+version: 0.1.20
 appVersion: "latest"
+
+keywords:
+  - fixedge
+  - fix
+  - trading
+  - financial
+
+home: https://github.com/epam/b2bits-helmcharts
+sources:
+  - https://github.com/epam/b2bits-helmcharts
+
+maintainers:
+  - name: EPAM
+    email: SupportFIXAntenna@epam.com
