@@ -29,7 +29,6 @@ If you want to use a private repository with configuration for fixedge and fixic
 To install the chart with the release name `my-release`:
     
     helm install my-release fixedge/fixedge --namespace fixedge
-    helm install my-release fixedge/fixicc-agent --namespace fixedge
 
 ### Uninstalling the Chart
 To uninstall/delete the my-release deployment:
@@ -45,18 +44,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | Parameter |  Description | Default |
 | :-------- | :----------- | :------ |
 | force_init_configs | Update config on re-deploy | false |
-| git_configs.url | Repository with configuration for fixdge and fixicc-agent | https://github.com/morozandralek/helmcharts.git |
+| git_configs.url | Repository with configuration for fixdge and fixicc-agent | https://github.com/epam/b2bits-configuration-samples.git |
 | git_configs.branch | Branch from the config repository | main |
 | imagePullSecrets | The secret to downloading an image from a private repository | [] |
-| fixedge.image.url | Repository with fixedge image | 611262376458.dkr.ecr.eu-central-1.amazonaws.com/fixedge |
-| fixedge.image.version | Version of the fixedge image | 6.13.1-518 |
+| fixedge.image.url | Repository with fixedge image | b2bitsepam/fixedge-cpp |
+| fixedge.image.version | Version of the fixedge image | latest |
 | fixedge.image.imagePullPolicy | Image policy pull options | Always |
 | fixedge.port | Application port | 8901 |
 | fixedge.httpAdmPort | Admin application port  | 8903 |
 | fixedge.livenessProbe.initialDelaySeconds | Number of seconds after the container has started before startup | 15 |
 | fixedge.livenessProbe.periodSeconds | How often (in seconds) to perform the probe | 20 |
 | fixedge.resources | CPU/Memory resource requests/limits | Memory: 500Mi, CPU: 500m |
-| fixedge.storage.class | Storage class name | storage-fe |
+| fixedge.storage.class | Storage class name | gp2 |
 | fixedge.storage.accessModes | Access Mode for storage class | ReadWriteOnce |
 | fixedge.fe_configs.size | Storage size | 1Gi |
 | fixedge.fe_sessions_logs.size | Storage size | 1Gi |
