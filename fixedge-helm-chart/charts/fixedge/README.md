@@ -56,7 +56,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Parameter                                 | Description                                                      | Default                                                  |
 |:----------------------------------------- |:---------------------------------------------------------------- |:-----------------------------------------------          |
 | force_init_configs                        | Update config on re-deploy                                       | false                                                    |
-| git_configs.url                           | Repository with configuration for fixdge and fixicc-agent        | https://github.com/epam/b2bits-configuration-samples.git |
+| git_configs.url                           | Repository with configuration for fixdge                         | https://github.com/epam/b2bits-configuration-samples.git |
 | git_configs.branch                        | Branch from the config repository                                | main                                                     |
 | imagePullSecrets                          | The secret to downloading an image from a private repository     | []                                                       |
 | fixedge.image.url                         | Repository with fixedge image                                    | b2bitsepam/fixedge-cpp                                       |
