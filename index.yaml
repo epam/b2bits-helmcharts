@@ -139,7 +139,51 @@ entries:
     urls:
     - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-0.1.17/fixedge-0.1.17.tgz
     version: 0.1.17
+  fixedge-cpp:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-08-27T11:21:16.504004468Z"
+    description: A Helm chart for Kubernetes FIXEdge application
+    digest: 503d0d990c1657f93ef401d64b0b8ebec03a71d52dba588835d296d2d161a926
+    home: https://github.com/epam/b2bits-helmcharts
+    keywords:
+    - fixedge-cpp
+    - fix
+    - trading
+    - financial
+    maintainers:
+    - email: SupportFIXAntenna@epam.com
+      name: EPAM
+    name: fixedge-cpp
+    sources:
+    - https://github.com/epam/b2bits-helmcharts
+    type: application
+    urls:
+    - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-cpp-0.1.23/fixedge-cpp-0.1.23.tgz
+    version: 0.1.23
   fixedge-java:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-08-27T11:21:16.648309621Z"
+    description: A Helm chart for Kubernetes FIXEdge Java application
+    digest: f5f394f11b2718e477d4c301bf118ea527c9430af5a83e4432d335e3d7496ccc
+    home: https://github.com/epam/b2bits-helmcharts
+    keywords:
+    - fixedge-java
+    - fix
+    - trading
+    - financial
+    - java
+    maintainers:
+    - email: SupportFIXAntenna@epam.com
+      name: EPAM
+    name: fixedge-java
+    sources:
+    - https://github.com/epam/b2bits-helmcharts
+    type: application
+    urls:
+    - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-java-0.1.8/fixedge-java-0.1.8.tgz
+    version: 0.1.8
   - apiVersion: v2
     appVersion: latest
     created: "2025-08-04T11:51:36.041561995Z"
