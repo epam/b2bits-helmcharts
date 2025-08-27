@@ -1,10 +1,10 @@
 apiVersion: v2
-name: fej
+name: fixedge-java
 description: A Helm chart for Kubernetes FIXEdge Java application
 
 type: application
 
-version: 0.1.7
+version: 0.1.8
 appVersion: "latest"
 
 keywords:
