@@ -134,7 +134,7 @@ spec:
           env:          
             - name: "force_init_configs"
               value: {{ .Values.force_init_configs | squote }}
-          command: ['sh', '-c', '[[ "${force_init_configs}" == "true" || ! -f "/etc/fixedge/FIXEdge.properties" ]] && cp -R /mnt/fe-configs/data/fixedge/* /etc/fixedge && echo "Copy configs - done." || echo "/etc/fixedge/FIXEdge.properties already exists, skip copying..."']
+          command: ['sh', '-c', '[[ "${force_init_configs}" == "true" || ! -f "/etc/fixedge/FIXEdge.properties" ]] && cp -R /mnt/fe-configs/data/fixedge-cpp/* /etc/fixedge && echo "Copy configs - done." || echo "/etc/fixedge/FIXEdge.properties already exists, skip copying..."']
           volumeMounts: 
             - name: cache-volume
               mountPath: "/mnt/fe-configs"

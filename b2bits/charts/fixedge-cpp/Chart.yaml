@@ -1,14 +1,14 @@
 apiVersion: v2
-name: fixedge
+name: fixedge-cpp
 description: A Helm chart for Kubernetes FIXEdge application
 
 type: application
 
-version: 0.1.22
+version: 0.1.23
 appVersion: "latest"
 
 keywords:
-  - fixedge
+  - fixedge-cpp
   - fix
   - trading
   - financial
