@@ -142,6 +142,27 @@ entries:
   fixedge-cpp:
   - apiVersion: v2
     appVersion: latest
+    created: "2025-08-27T11:38:47.036219197Z"
+    description: A Helm chart for Kubernetes FIXEdge application
+    digest: 955d4ec4debdf01ccc7e580ff132f9d0abc8fe41c3819e22ce4dc59289db262e
+    home: https://github.com/epam/b2bits-helmcharts
+    keywords:
+    - fixedge-cpp
+    - fix
+    - trading
+    - financial
+    maintainers:
+    - email: SupportFIXAntenna@epam.com
+      name: EPAM
+    name: fixedge-cpp
+    sources:
+    - https://github.com/epam/b2bits-helmcharts
+    type: application
+    urls:
+    - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-cpp-0.1.24/fixedge-cpp-0.1.24.tgz
+    version: 0.1.24
+  - apiVersion: v2
+    appVersion: latest
     created: "2025-08-27T11:21:16.504004468Z"
     description: A Helm chart for Kubernetes FIXEdge application
     digest: 503d0d990c1657f93ef401d64b0b8ebec03a71d52dba588835d296d2d161a926
