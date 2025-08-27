@@ -3,6 +3,28 @@ entries:
   fej:
   - apiVersion: v2
     appVersion: latest
+    created: "2025-08-27T09:24:13.340026863Z"
+    description: A Helm chart for Kubernetes FIXEdge Java application
+    digest: 466a99c70cd4931099d7e656a1fafa686502a0d283e49cd03267e55d66cb9d9c
+    home: https://github.com/epam/b2bits-helmcharts
+    keywords:
+    - fixedge-java
+    - fix
+    - trading
+    - financial
+    - java
+    maintainers:
+    - email: SupportFIXAntenna@epam.com
+      name: EPAM
+    name: fej
+    sources:
+    - https://github.com/epam/b2bits-helmcharts
+    type: application
+    urls:
+    - https://github.com/epam/b2bits-helmcharts/releases/download/fej-0.1.7/fej-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: latest
     created: "2025-08-26T13:11:31.952417801Z"
     description: A Helm chart for Kubernetes FIXEdge Java application
     digest: 066c45105ce588689ed65eed98782f3c5453cdfdc7cad129c454cc8ead32429b
@@ -24,6 +46,27 @@ entries:
     - https://github.com/epam/b2bits-helmcharts/releases/download/fej-0.1.6/fej-0.1.6.tgz
     version: 0.1.6
   fixedge:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-08-27T09:24:13.4980127Z"
+    description: A Helm chart for Kubernetes FIXEdge application
+    digest: 66c30293b94e0b461bc3dfad9a9f5d15676df83c77298900470019d377f3e112
+    home: https://github.com/epam/b2bits-helmcharts
+    keywords:
+    - fixedge
+    - fix
+    - trading
+    - financial
+    maintainers:
+    - email: SupportFIXAntenna@epam.com
+      name: EPAM
+    name: fixedge
+    sources:
+    - https://github.com/epam/b2bits-helmcharts
+    type: application
+    urls:
+    - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-0.1.22/fixedge-0.1.22.tgz
+    version: 0.1.22
   - apiVersion: v2
     appVersion: latest
     created: "2025-08-26T13:11:32.134266704Z"
