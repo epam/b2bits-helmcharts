@@ -89,7 +89,7 @@ Create the necessary namespace, if necessary, you can use the existing one:
 Use existing license or request a trial version from sales@btobits.com:
 
     kubectl create secret generic fixaj2-java-license-file --from-file=path/to/fixaj2-license.bin --namespace fixedge-java
-    kubectl create secret generic fixedge-java-license-file --from-file=path/to/fixedgej-license.bin -namespace fixedge-java
+    kubectl create secret generic fixedge-java-license-file --from-file=path/to/fixedgej-license.bin --namespace fixedge-java
 
 If you want to use a private repository with configuration for fixedge-java, you need to add a key (by default, the configuration is in the public repository):
 
