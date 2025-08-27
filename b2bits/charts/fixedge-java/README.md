@@ -7,10 +7,12 @@ This is the Official EPAM B2Bits Helm chart for installing and configuring FIXEd
 ## Quickstart
 
 ```
-$ kubectl create secret generic fixaj2-java-license-file --from-file=path/to/fixaj2-license.bin
-$ kubectl create secret generic fixedge-java-license-file --from-file=path/to/fixedgej-license.bin
+$ kubectl create namespace fixedge-java
+$ kubectl create secret generic fixaj2-java-license-file --from-file=path/to/fixaj2-license.bin -n fixedge-java
+$ kubectl create secret generic fixedge-java-license-file --from-file=path/to/fixedgej-license.bin -n fixedge-java
 $ helm repo add b2bits https://epam.github.io/b2bits-helmcharts
-$ helm install my-fixedge-java b2bits/fixedge-java
+$ helm repo update
+$ helm install my-fixedge-java b2bits/fixedge-java -n fixedge-java
 ```
 
 ## Introduction
@@ -33,10 +35,12 @@ To run FIXEdge you will need a valid license key file. You can obtain a trial li
 To install the chart with the release name `my-fixedge-java`:
 
 ```
-$ kubectl create secret generic fixaj2-java-license-file --from-file=path/to/fixaj2-license.bin
-$ kubectl create secret generic fixedge-java-license-file --from-file=path/to/fixedgej-license.bin
+$ kubectl create namespace fixedge-java
+$ kubectl create secret generic fixaj2-java-license-file --from-file=path/to/fixaj2-license.bin -n fixedge-java
+$ kubectl create secret generic fixedge-java-license-file --from-file=path/to/fixedgej-license.bin -n fixedge-java
 $ helm repo add b2bits https://epam.github.io/b2bits-helmcharts
-$ helm install my-fixedge-java b2bits/fixedge-java
+$ helm repo update
+$ helm install my-fixedge-java b2bits/fixedge-java -n fixedge-java
 ```
 
 These commands deploy B2Bits FIXEdge on the Kubernetes cluster in the default configuration. The **Parameters** section below lists the parameters that can be configured during installation.
@@ -48,7 +52,7 @@ These commands deploy B2Bits FIXEdge on the Kubernetes cluster in the default co
 To uninstall/delete the `my-fixedge-java` deployment:
 
 ```
-$ helm delete my-fixedge-java
+$ helm delete my-fixedge-java -n fixedge-java
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -63,8 +67,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | fixedge_java.image.url                          | Docker image URL for FIXEdge Java              | b2bitsepam/fixedge-java                                  |
 | fixedge_java.image.version                      | Docker image version                           | latest                                                   |
 | fixedge_java.image.imagePullPolicy              | Image pull policy                              | Always                                                   |
-| fixedge_java.port                               | FIXEdge Java port                              | 8901                                                     |
-| fixedge_java.httpAdmPort                        | FIXEdge Java HTTP admin port                   | 8911                                                     |
+| fixedge_java.port                               | FIXEdge Java port                              | 8911                                                     |
+| fixedge_java.httpAdmPort                        | FIXEdge Java HTTP admin port                   | 9010                                                     |
 | fixedge_java.resources.requests.cpu             | CPU request                                    | 0.5                                                      |
 | fixedge_java.resources.requests.memory          | Memory request                                 | 1Gi                                                      |
 | fixedge_java.resources.limits.cpu               | CPU limit                                      | 0.5                                                      |
@@ -78,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-fixedge-java --set force_init_configs=true,fixedge_java.resources.limits.memory=800Mi b2bits/fixedge-java
+$ helm install my-fixedge-java --set force_init_configs=true,fixedge_java.resources.limits.memory=800Mi b2bits/fixedge-java -n fixedge-java
 ```
 
 The above command forces pull configuration on start (`force_init_configs=true`) and sets RAM limit to `800Mi`.
@@ -86,7 +90,7 @@ The above command forces pull configuration on start (`force_init_configs=true`)
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-fixedge-java -f values.yaml b2bits/fixedge-java
+$ helm install my-fixedge-java -f values.yaml b2bits/fixedge-java -n fixedge-java
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml) for reference.
@@ -95,16 +99,16 @@ $ helm install my-fixedge-java -f values.yaml b2bits/fixedge-java
 
 ### Using custom configuration
 
-By default this helm chart clones FIXEdge configuration from `https://epam.github.io/b2bits-helmcharts`.
+By default this helm chart clones FIXEdge configuration from `https://github.com/epam/b2bits-configuration-samples/tree/main/fixedge-java`.
 
 If you choose to maintain your custom FIXEdge configuration in private Git repository, you shuold provide SSH details for access to remote repository:
 
 ```
-$ kubectl create secret generic ssh-creds --from-file=path/to/known_hosts --from-file=path/to/id_rsa
+$ kubectl create secret generic ssh-creds --from-file=path/to/known_hosts --from-file=path/to/id_rsa -n fixedge-java
 ```
 
 ```
-$ helm install my-fixedge-java --set git_configs.url=<your-git-repo-ssh-url>,git_configs.branch=<your-git-repo-branch> b2bits/fixedge-java
+$ helm install my-fixedge-java --set git_configs.url=<your-git-repo-ssh-url>,git_configs.branch=<your-git-repo-branch> b2bits/fixedge-java -n fixedge-java
 ```
 
 It is expected that all FIXEdge configuration files are grouped under `fixedge-java` folder in your repository.

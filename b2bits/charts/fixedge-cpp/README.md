@@ -7,9 +7,11 @@ This is the Official EPAM B2Bits Helm chart for installing and configuring FIXEd
 ## Quickstart
 
 ```
-$ kubectl create secret generic license-file --from-file=path/to/engine.license
+$ kubectl create namespace fixedge
+$ kubectl create secret generic license-file --from-file=path/to/engine.license -n fixedge
 $ helm repo add b2bits https://epam.github.io/b2bits-helmcharts
-$ helm install my-fixedge b2bits/fixedge-cpp
+$ helm repo update
+$ helm install my-fixedge b2bits/fixedge-cpp -n fixedge
 ```
 
 ## Introduction
@@ -32,9 +34,11 @@ To run FIXEdge you will need a valid license key file. You can obtain a trial li
 To install the chart with the release name `my-fixedge`:
 
 ```
-$ kubectl create secret generic license-file --from-file=path/to/engine.license
+$ kubectl create namespace fixedge
+$ kubectl create secret generic license-file --from-file=path/to/engine.license -n fixedge
 $ helm repo add b2bits https://epam.github.io/b2bits-helmcharts
-$ helm install my-fixedge b2bits/fixedge-cpp
+$ helm repo update
+$ helm install my-fixedge b2bits/fixedge-cpp -n fixedge
 ```
 
 These commands deploy B2Bits FIXEdge on the Kubernetes cluster in the default configuration. The **Parameters** section below lists the parameters that can be configured during installation.
@@ -46,7 +50,7 @@ These commands deploy B2Bits FIXEdge on the Kubernetes cluster in the default co
 To uninstall/delete the `my-fixedge` deployment:
 
 ```
-$ helm delete my-fixedge
+$ helm delete my-fixedge -n fixedge
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -76,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-fixedge --set force_init_configs=true,fixedge.resources.limits.memory=800Mi b2bits/fixedge-cpp
+$ helm install my-fixedge --set force_init_configs=true,fixedge.resources.limits.memory=800Mi b2bits/fixedge-cpp -n fixedge
 ```
 
 The above command forces pull configuration on start (`force_init_configs=true`) and sets RAM limit to `800Mi`.
@@ -84,7 +88,7 @@ The above command forces pull configuration on start (`force_init_configs=true`)
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-fixedge -f values.yaml b2bits/fixedge-cpp
+$ helm install my-fixedge -f values.yaml b2bits/fixedge-cpp -n fixedge
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml) for reference.
@@ -93,16 +97,16 @@ $ helm install my-fixedge -f values.yaml b2bits/fixedge-cpp
 
 ### Using custom configuration
 
-By default this helm chart clones FIXEdge configuration from `https://github.com/epam/b2bits-configuration-samples/tree/main/fixedge`.
+By default this helm chart clones FIXEdge configuration from `https://github.com/epam/b2bits-configuration-samples/tree/main/fixedge-cpp`.
 
 If you choose to maintain your custom FIXEdge configuration in private Git repository, you shuold provide SSH details for access to remote repository:
 
 ```
-$ kubectl create secret generic ssh-creds --from-file=path/to/known_hosts --from-file=path/to/id_rsa
+$ kubectl create secret generic ssh-creds --from-file=path/to/known_hosts --from-file=path/to/id_rsa -n fixedge
 ```
 
 ```
-$ helm install my-fixedge --set git_configs.url=<your-git-repo-ssh-url>,git_configs.branch=<your-git-repo-branch> b2bits/fixedge-cpp
+$ helm install my-fixedge --set git_configs.url=<your-git-repo-ssh-url>,git_configs.branch=<your-git-repo-branch> b2bits/fixedge-cpp -n fixedge
 ```
 
 It is expected that all FIXEdge configuration files are grouped under `fixedge` folder in your repository.
