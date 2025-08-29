@@ -140,3 +140,74 @@ Run with parameter override:
     --set fixedge_java.resources.requests.memory=1Gi \
     --set fixedge_java.resources.limits.cpu=1 \
     --set fixedge_java.resources.limits.memory=1Gi
+
+# FIXICC-H2 Helm Chart
+
+### Overview
+FIXICC H2 is a new generation FIX Integrated Control Center application available via a web browser. It is designed to administer, configure and monitor the FIXEDGE line of products, including standalone FIX engines and clusters of FIX engines..
+
+### Get Repo Info
+
+    helm repo add b2bits https://epam.github.io/b2bits-helmcharts
+    helm repo update
+
+*See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation.*
+
+### Prepare
+Create the necessary namespace, if necessary, you can use the existing one:
+
+    kubectl create namespace fixicc-h2
+
+If you want to use a private repository with configuration for fixicc-h2, you need to add a key (by default, the configuration is in the public repository):
+
+    kubectl create secret generic ssh-creds --from-file=known_hosts --from-file=id_rsa --namespace fixicc-h2
+
+*Command to generate known_hosts: `ssh-keyscan -H github.com > known_hosts` where `github.com` is the domain of your svc*
+
+### Installing the Chart
+To install the chart with the release name `my-release`:
+    
+    helm install my-release b2bits/fixicc-h2 --namespace fixicc-h2
+
+### Uninstalling the Chart
+To uninstall/delete the my-release deployment:
+
+    helm delete my-release --namespace fixicc-h2
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
+
+### Configuration
+
+#### FIXICC-H2:
+
+| Parameter                                 | Description                                                      | Default                                                  |
+| :---------------------------------------- | :--------------------------------------------------------------- | :------------------------------------------------------- |
+| force_init_configs                        | Update config on re-deploy                                       | false                                                    |
+| git_configs.url                           | Repository with configuration for fixicc                         | https://github.com/epam/b2bits-configuration-samples.git |
+| git_configs.branch                        | Branch from the config repository                                | main                                                     |
+| imagePullSecrets                          | The secret to downloading an image from a private repository     | []                                                       |
+| fixicc.image.url                          | Repository with fixicc image                                     | b2bitsepam/fixicc-h2                                     |
+| fixicc.image.version                      | Version of the fixicc image                                      | latest                                                   |
+| fixicc.image.imagePullPolicy             | Image policy pull options                                        | Always                                                   |
+| fixicc.port                              | Application port                                                 | 8080                                                     |
+| fixicc.livenessProbe.initialDelaySeconds | Number of seconds after the container has started before startup | 60                                                       |
+| fixicc.livenessProbe.periodSeconds       | How often (in seconds) to perform the probe                      | 30                                                       |
+| fixicc.livenessProbe.timeoutSeconds      | Number of seconds after which the probe times out                | 10                                                       |
+| fixicc.livenessProbe.failureThreshold    | Minimum consecutive failures for the probe to be considered failed | 5                                                        |
+| fixicc.readinessProbe.initialDelaySeconds | Number of seconds after the container has started before startup | 30                                                       |
+| fixicc.readinessProbe.periodSeconds       | How often (in seconds) to perform the probe                      | 15                                                       |
+| fixicc.readinessProbe.timeoutSeconds      | Number of seconds after which the probe times out                | 10                                                       |
+| fixicc.readinessProbe.failureThreshold    | Minimum consecutive failures for the probe to be considered failed | 5                                                        |
+| fixicc.resources                          | CPU/Memory resource requests/limits                              | Memory: 2Gi, CPU: 1000m                                 |
+| fixicc.storage.class                      | Storage class name                                               | gp2                                                      |
+| fixicc.storage.accessModes                | Access Mode for storage class                                    | ReadWriteOnce                                            |
+| fixicc.storage.fixicc_configs.size        | Storage size for configuration files                             | 1Gi                                                      |
+| fixicc.storage.fixicc_logs.size           | Storage size for application logs                               | 10Gi                                                     |
+
+Run with parameter override:
+
+    helm install fixicc-h2 b2bits/fixicc-h2 --namespace fixicc-h2 \
+    --set fixicc.resources.requests.cpu=2 \
+    --set fixicc.resources.requests.memory=2Gi \
+    --set fixicc.resources.limits.cpu=2 \
+    --set fixicc.resources.limits.memory=2Gi
