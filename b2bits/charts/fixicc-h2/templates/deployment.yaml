@@ -1,0 +1,140 @@
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: fixicc
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fixicc
+  serviceName: "fixicc"
+  template:
+    metadata:
+      labels:
+        app: fixicc
+        service: fixicc
+    spec:
+      volumes:
+      - name: cache-volume
+        emptyDir: {}
+      - name: fixicc-configs-data
+        persistentVolumeClaim:
+          claimName: fixicc-configs-pvc
+      - name: fixicc-logs-data
+        persistentVolumeClaim:
+          claimName: fixicc-logs-pvc
+      - name: ssh-creds-files
+        secret:
+          secretName: ssh-creds
+          optional: true
+          defaultMode: 256
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: fixicc
+        image: {{ .Values.fixicc.image.url }}:{{ .Values.fixicc.image.version }}
+        resources:
+{{ toYaml .Values.fixicc.resources | indent 10 }}
+        imagePullPolicy: {{ .Values.fixicc.image.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.fixicc.port }}
+          protocol: TCP
+        env:
+        - name: JAVA_OPTS
+          value: "-Xmx1536m -Xms512m -Djava.security.egd=file:/dev/./urandom"
+        - name: TZ
+          value: "UTC"
+        livenessProbe:
+          httpGet:
+            path: /app
+            port: {{ .Values.fixicc.port }}
+          initialDelaySeconds: {{ .Values.fixicc.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.fixicc.livenessProbe.periodSeconds }}
+        readinessProbe:
+          httpGet:
+            path: /app
+            port: {{ .Values.fixicc.port }}
+          initialDelaySeconds: {{ .Values.fixicc.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.fixicc.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.fixicc.readinessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.fixicc.readinessProbe.failureThreshold }}
+        volumeMounts:
+        - name: fixicc-configs-data
+          mountPath: /etc/fixicc-h2
+        - name: fixicc-logs-data
+          mountPath: /var/log/fixicc-h2
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+      initContainers:
+        - name: git-cloner
+          image: alpine/git
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 100Mi
+            limits:
+              cpu: 0.2
+              memory: 100Mi
+          args:
+              - clone
+              - --single-branch
+              - --branch
+              - {{ .Values.git_configs.branch }}
+              - --
+              - {{ .Values.git_configs.url }}
+              - /mnt/fixicc-configs/data
+          volumeMounts: 
+            - name: "ssh-creds-files"
+              mountPath: "/root/.ssh"
+            - name: cache-volume
+              mountPath: "/mnt/fixicc-configs"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+        - name: copy-configs
+          image: busybox:1.28
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 100Mi
+            limits:
+              cpu: 0.2
+              memory: 100Mi
+          env:          
+            - name: "force_init_configs"
+              value: {{ .Values.force_init_configs | squote }}
+          command: ['sh', '-c', '[[ "${force_init_configs}" == "true" || ! -f "/etc/fixicc-h2/local.app.properties" ]] && cp -R /mnt/fixicc-configs/data/fixicc-h2/* /etc/fixicc-h2 && echo "Copy configs - done." || echo "/etc/fixicc-h2/local.app.properties already exists, skip copying..."']
+          volumeMounts: 
+            - name: cache-volume
+              mountPath: "/mnt/fixicc-configs"
+            - name: fixicc-configs-data
+              mountPath: /etc/fixicc-h2
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+        - name: dirs-init
+          image: busybox:1.28
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 100Mi
+            limits:
+              cpu: 0.2
+              memory: 100Mi
+          command: ['sh', '-c', 'mkdir -p /var/log/fixicc-h2']
+          volumeMounts: 
+            - name: fixicc-logs-data
+              mountPath: /var/log/fixicc-h2
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
