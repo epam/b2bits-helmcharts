@@ -1,0 +1,23 @@
+apiVersion: v2
+name: fixicc-h2
+description: A Helm chart for Kubernetes FIXICC H2 application
+
+type: application
+
+version: 0.0.1
+appVersion: "latest"
+
+keywords:
+  - fixicc-h2
+  - fix
+  - trading
+  - financial
+  - h2
+
+home: https://github.com/epam/b2bits-helmcharts
+sources:
+  - https://github.com/epam/b2bits-helmcharts
+
+maintainers:
+  - name: EPAM
+    email: SupportFIXAntenna@epam.com
