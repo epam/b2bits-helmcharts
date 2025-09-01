@@ -1,0 +1,51 @@
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixeye-configs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixeye.storage.accessModes }}
+  {{- if .Values.fixeye.storage.class }}
+  storageClassName: {{ .Values.fixeye.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixeye.storage.configs.size }}
+
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixeye-samples-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixeye.storage.accessModes }}
+  {{- if .Values.fixeye.storage.class }}
+  storageClassName: {{ .Values.fixeye.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixeye.storage.samples.size }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixeye-logs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixeye.storage.accessModes }}
+  {{- if .Values.fixeye.storage.class }}
+  storageClassName: {{ .Values.fixeye.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixeye.storage.logs.size }}
