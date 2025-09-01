@@ -1,0 +1,146 @@
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: fixeye
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fixeye
+  serviceName: "fixeye"
+  template:
+    metadata:
+      labels:
+        app: fixeye
+        service: fixeye
+    spec:
+      volumes:
+      - name: cache-volume
+        emptyDir: {}
+      - name: fixeye-configs-data
+        persistentVolumeClaim:
+          claimName: fixeye-configs-pvc
+      - name: fixeye-samples-data
+        persistentVolumeClaim:
+          claimName: fixeye-samples-pvc
+      - name: fixeye-logs-data
+        persistentVolumeClaim:
+          claimName: fixeye-logs-pvc
+      - name: fe-license-file
+        secret:
+          secretName: fixeye-license-file
+      - name: ssh-creds-files
+        secret:
+          secretName: ssh-creds
+          optional: true
+          defaultMode: 256
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: fixeye
+        image: {{ .Values.fixeye.image.url }}:{{ .Values.fixeye.image.version }}
+        resources:
+{{ toYaml .Values.fixeye.resources | indent 10 }}
+        imagePullPolicy: {{ .Values.fixeye.image.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.fixeye.port }}
+          protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.fixeye.port }}
+          initialDelaySeconds: {{ .Values.fixeye.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.fixeye.livenessProbe.periodSeconds }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.fixeye.port }}
+          initialDelaySeconds: {{ .Values.fixeye.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.fixeye.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.fixeye.readinessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.fixeye.readinessProbe.failureThreshold }}
+        volumeMounts:
+        - name: fe-license-file
+          mountPath: /etc/fixeye/fixeye-agent.license
+          subPath: fixeye-agent.license
+        - name: fixeye-configs-data
+          mountPath: /etc/fixeye
+        - name: fixeye-samples-data
+          mountPath: /usr/share/doc/fixeye/samples
+        - name: fixeye-logs-data
+          mountPath: /var/log/fixeye
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+      initContainers:
+        - name: git-cloner
+          image: alpine/git
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 100Mi
+            limits:
+              cpu: 0.2
+              memory: 100Mi
+          args:
+              - clone
+              - --single-branch
+              - --branch
+              - {{ .Values.git_configs.branch }}
+              - --
+              - {{ .Values.git_configs.url }}
+              - /mnt/fe-configs/data
+          volumeMounts: 
+            - name: "ssh-creds-files"
+              mountPath: "/root/.ssh"
+            - name: cache-volume
+              mountPath: "/mnt/fe-configs"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+        - name: copy-configs
+          image: busybox:1.28
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 100Mi
+            limits:
+              cpu: 0.2
+              memory: 100Mi
+          env:          
+            - name: "force_init_configs"
+              value: {{ .Values.force_init_configs | squote }}
+          command: ['sh', '-c', '[[ "${force_init_configs}" == "true" || ! -f "/etc/fixeye/fixeye-agent.properties" ]] && cp -R /mnt/fe-configs/data/fixeye-agent/* /etc/fixeye && echo "Copy configs - done." || echo "/etc/fixeye/fixeye-agent.properties already exists, skip copying..."']
+          volumeMounts: 
+            - name: cache-volume
+              mountPath: "/mnt/fe-configs"
+            - name: fixeye-configs-data
+              mountPath: /etc/fixeye
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+        - name: dirs-init
+          image: busybox:1.28
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 100Mi
+            limits:
+              cpu: 0.2
+              memory: 100Mi
+          command: ['sh', '-c', 'mkdir -p /usr/share/doc/fixeye/samples /var/log/fixeye']
+          volumeMounts: 
+            - name: fixeye-samples-data
+              mountPath: /usr/share/doc/fixeye/samples
+            - name: fixeye-logs-data
+              mountPath: /var/log/fixeye
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]

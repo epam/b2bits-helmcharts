@@ -1,0 +1,22 @@
+apiVersion: v2
+name: fixeye-agent
+description: A Helm chart for Kubernetes FixEye Agent application
+
+type: application
+
+version: 0.0.1
+appVersion: "latest"
+
+keywords:
+  - fixeye-agent
+  - fix
+  - trading
+  - financial
+
+home: https://github.com/epam/b2bits-helmcharts
+sources:
+  - https://github.com/epam/b2bits-helmcharts
+
+maintainers:
+  - name: EPAM
+    email: SupportFIXAntenna@epam.com

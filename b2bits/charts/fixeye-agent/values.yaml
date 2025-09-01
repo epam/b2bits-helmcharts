@@ -1,0 +1,45 @@
+# FixEye Agent subchart values
+# These values can be overridden from the parent chart
+
+force_init_configs: false
+git_configs:
+  url: https://github.com/epam/b2bits-configuration-samples.git
+  branch: main
+
+imagePullSecrets: []
+
+fixeye:
+  image:
+    url: b2bitsepam/fixeye-agent
+    version: latest
+    imagePullPolicy: Always
+  port: 8882
+  livenessProbe:
+    initialDelaySeconds: 15
+    periodSeconds: 20
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 500Mi
+    limits:
+      cpu: 0.5
+      memory: 500Mi
+  storage:
+    # The StorageClass to use for the servers' StatefulSet storage. 
+    # Empty value will use the Kubernetes cluster's default StorageClass. If a default
+    # StorageClass does not exist, you will need to create one.
+    # A `store-aws-ebs-fe` version: 0.1.20
+    # suitable for deployment in EKS - see templates/storageclass.yaml for details.
+    class: "gp2"
+    accessModes: ReadWriteOnce
+    configs:
+      size: 1Gi
+    samples:
+      size: 1Gi
+    logs:
+      size: 10Gi
