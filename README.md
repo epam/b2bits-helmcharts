@@ -211,3 +211,73 @@ Run with parameter override:
     --set fixicc.resources.requests.memory=2Gi \
     --set fixicc.resources.limits.cpu=2 \
     --set fixicc.resources.limits.memory=2Gi
+
+# FixEye Agent Helm Chart
+
+### Overview
+FIXEye and FIXGrep are powerful next generation FIX log analyzers. These utilities are the result of many years of experience in FIX support. These log browsers go beyond traditional parsers and are equipped with full knowledge of FIX objects and their state management..
+
+### Get Repo Info
+
+    helm repo add b2bits https://epam.github.io/b2bits-helmcharts
+    helm repo update
+
+*See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation.*
+
+### Prepare
+Create the necessary namespace, if necessary, you can use the existing one:
+
+    kubectl create namespace fixeye
+
+Use existing license or request a trial version from sales@btobits.com:
+
+    kubectl create secret generic fixeye-license-file --from-file=path/to/fixeye-agent.license --namespace fixeye
+
+If you want to use a private repository with configuration for fixeye-agent, you need to add a key (by default, the configuration is in the public repository):
+
+    kubectl create secret generic ssh-creds --from-file=known_hosts --from-file=id_rsa --namespace fixeye
+
+*Command to generate known_hosts: `ssh-keyscan -H github.com > known_hosts` where `github.com` is the domain of your svc*
+
+### Installing the Chart
+To install the chart with the release name `my-release`:
+    
+    helm install my-release b2bits/fixeye-agent --namespace fixeye
+
+### Uninstalling the Chart
+To uninstall/delete the my-release deployment:
+
+    helm delete my-release --namespace fixeye
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
+
+### Configuration
+
+#### FixEye Agent:
+
+| Parameter                                 | Description                                                      | Default                                                  |
+| :---------------------------------------- | :--------------------------------------------------------------- | :------------------------------------------------------- |
+| force_init_configs                        | Update config on re-deploy                                       | false                                                    |
+| git_configs.url                           | Repository with configuration for fixeye                         | https://github.com/epam/b2bits-configuration-samples.git |
+| git_configs.branch                        | Branch from the config repository                                | main                                                     |
+| imagePullSecrets                          | The secret to downloading an image from a private repository     | []                                                       |
+| fixeye.image.url                          | Repository with fixeye image                                     | b2bitsepam/fixeye-agent                                  |
+| fixeye.image.version                      | Version of the fixeye image                                      | latest                                                   |
+| fixeye.image.imagePullPolicy              | Image policy pull options                                        | Always                                                   |
+| fixeye.port                               | Application port                                                 | 8882                                                     |
+| fixeye.livenessProbe.initialDelaySeconds  | Number of seconds after the container has started before startup | 15                                                       |
+| fixeye.livenessProbe.periodSeconds        | How often (in seconds) to perform the probe                      | 20                                                       |
+| fixeye.resources                          | CPU/Memory resource requests/limits                              | Memory: 500Mi, CPU: 500m                                 |
+| fixeye.storage.class                      | Storage class name                                               | gp2                                                      |
+| fixeye.storage.accessModes                | Access Mode for storage class                                    | ReadWriteOnce                                            |
+| fixeye.configs.size                       | Storage size for configs                                         | 1Gi                                                      |
+| fixeye.samples.size                       | Storage size for samples                                         | 1Gi                                                      |
+| fixeye.logs.size                          | Storage size for logs                                            | 10Gi                                                     |
+
+Run with parameter override:
+
+    helm install fixeye-agent b2bits/fixeye-agent --namespace fixeye \
+    --set fixeye.resources.requests.cpu=1 \
+    --set fixeye.resources.requests.memory=1Gi \
+    --set fixeye.resources.limits.cpu=1 \
+    --set fixeye.resources.limits.memory=1Gi
