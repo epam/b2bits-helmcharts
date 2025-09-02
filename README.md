@@ -281,3 +281,103 @@ Run with parameter override:
     --set fixeye.resources.requests.memory=1Gi \
     --set fixeye.resources.limits.cpu=1 \
     --set fixeye.resources.limits.memory=1Gi
+
+# FIXEdge CPP with H2 and FixEye Agent Bundle Helm Chart
+
+### Overview
+This bundle provides a complete FIX trading solution by deploying FIXEdge CPP, FIXICC H2, and FixEye Agent as a single pod on Kubernetes. This approach ensures optimal performance and seamless data sharing between components. FIXEdge processes FIX messages and stores session data, FIXICC provides database functionality for FIX message storage and retrieval, and FixEye monitors and analyzes FIX messages with read access to FIXEdge data.
+
+### Get Repo Info
+
+    helm repo add b2bits https://epam.github.io/b2bits-helmcharts
+    helm repo update
+
+*See [helm repo](https://helm.sh/docs/helm/helm_repo/) for command documentation.*
+
+### Prepare
+Create the necessary namespace, if necessary, you can use the existing one:
+
+    kubectl create namespace fixedge-cpp-bundle
+
+Use existing licenses or request trial versions from sales@btobits.com:
+
+    kubectl create secret generic license-file --from-file=path/to/engine.license --namespace fixedge-cpp-bundle
+    kubectl create secret generic fixeye-license-file --from-file=path/to/fixeye-agent.license --namespace fixedge-cpp-bundle
+
+If you want to use a private repository with configuration for the bundle, you need to add a key (by default, the configuration is in the public repository):
+
+    kubectl create secret generic ssh-creds --from-file=known_hosts --from-file=id_rsa --namespace fixedge-cpp-bundle
+
+*Command to generate known_hosts: `ssh-keyscan -H github.com > known_hosts` where `github.com` is the domain of your svc*
+
+### Installing the Chart
+To install the chart with the release name `my-release`:
+    
+    helm install my-release b2bits/fixedge-cpp-with-h2-bundle --namespace fixedge-cpp-bundle
+
+### Uninstalling the Chart
+To uninstall/delete the my-release deployment:
+
+    helm delete my-release --namespace fixedge-cpp-bundle
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
+
+### Configuration
+
+#### Bundle Components:
+
+| Parameter                                 | Description                                                      | Default                                                  |
+| :---------------------------------------- | :--------------------------------------------------------------- | :------------------------------------------------------- |
+| force_init_configs                        | Update config on re-deploy                                       | false                                                    |
+| git_configs.url                           | Repository with configuration for all components                | https://github.com/epam/b2bits-configuration-samples.git |
+| git_configs.branch                        | Branch from the config repository                                | main                                                     |
+| imagePullSecrets                          | The secret to downloading an image from a private repository     | []                                                       |
+| **FIXEdge Parameters**                    |                                                                  |                                                          |
+| fixedge.image.url                         | Repository with fixedge image                                    | b2bitsepam/fixedge-cpp                                   |
+| fixedge.image.version                     | Version of the fixedge image                                     | latest                                                   |
+| fixedge.image.imagePullPolicy             | Image policy pull options                                        | Always                                                   |
+| fixedge.port                              | Application port                                                 | 8901                                                     |
+| fixedge.httpAdmPort                       | Admin application port                                           | 8903                                                     |
+| fixedge.livenessProbe.initialDelaySeconds | Number of seconds after the container has started before startup | 15                                                       |
+| fixedge.livenessProbe.periodSeconds       | How often (in seconds) to perform the probe                      | 20                                                       |
+| fixedge.resources                         | CPU/Memory resource requests/limits                              | Memory: 500Mi, CPU: 500m                                 |
+| fixedge.storage.class                     | Storage class name                                               | gp2                                                      |
+| fixedge.storage.accessModes               | Access Mode for storage class                                    | ReadWriteOnce                                            |
+| fixedge.fe_configs.size                   | Storage size                                                     | 1Gi                                                      |
+| fixedge.fe_sessions_logs.size             | Storage size                                                     | 10Gi                                                     |
+| fixedge.fe_app_logs.size                  | Storage size                                                     | 10Gi                                                     |
+| **FIXICC Parameters**                     |                                                                  |                                                          |
+| fixicc.image.url                          | Repository with fixicc image                                     | b2bitsepam/fixicc-h2                                     |
+| fixicc.image.version                      | Version of the fixicc image                                      | latest                                                   |
+| fixicc.image.imagePullPolicy             | Image policy pull options                                        | Always                                                   |
+| fixicc.port                               | Application port                                                 | 8080                                                     |
+| fixicc.livenessProbe.initialDelaySeconds | Number of seconds after the container has started before startup | 60                                                       |
+| fixicc.livenessProbe.periodSeconds       | How often (in seconds) to perform the probe                      | 30                                                       |
+| fixicc.resources                          | CPU/Memory resource requests/limits                              | Memory: 2Gi, CPU: 1000m                                  |
+| fixicc.storage.class                      | Storage class name                                               | gp2                                                      |
+| fixicc.storage.accessModes                | Access Mode for storage class                                     | ReadWriteOnce                                            |
+| fixicc.fixicc_configs.size                | Storage size                                                     | 1Gi                                                      |
+| fixicc.fixicc_logs.size                   | Storage size                                                     | 10Gi                                                     |
+| **FixEye Parameters**                     |                                                                  |                                                          |
+| fixeye.image.url                          | Repository with fixeye image                                     | b2bitsepam/fixeye-agent                                  |
+| fixeye.image.version                      | Version of the fixeye image                                      | latest                                                   |
+| fixeye.image.imagePullPolicy             | Image policy pull options                                        | Always                                                   |
+| fixeye.port                               | Application port                                                 | 8882                                                     |
+| fixeye.livenessProbe.initialDelaySeconds | Number of seconds after the container has started before startup | 15                                                       |
+| fixeye.livenessProbe.periodSeconds       | How often (in seconds) to perform the probe                      | 20                                                       |
+| fixeye.resources                          | CPU/Memory resource requests/limits                              | Memory: 500Mi, CPU: 500m                                 |
+| fixeye.storage.class                      | Storage class name                                               | gp2                                                      |
+| fixeye.storage.accessModes                | Access Mode for storage class                                     | ReadWriteOnce                                            |
+| fixeye.configs.size                       | Storage size                                                     | 1Gi                                                      |
+| fixeye.samples.size                       | Storage size                                                     | 1Gi                                                      |
+| fixeye.logs.size                          | Storage size                                                     | 10Gi                                                     |
+
+Run with parameter override:
+
+    helm install fixedge-cpp-bundle b2bits/fixedge-cpp-with-h2-bundle --namespace fixedge-cpp-bundle \
+    --set fixedge.resources.requests.cpu=1 \
+    --set fixedge.resources.requests.memory=1Gi \
+    --set fixicc.resources.requests.cpu=2 \
+    --set fixicc.resources.requests.memory=2Gi \
+    --set fixeye.resources.requests.cpu=1 \
+    --set fixeye.resources.requests.memory=1Gi
