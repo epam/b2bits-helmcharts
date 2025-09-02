@@ -3,6 +3,27 @@ entries:
   fixedge-cpp:
   - apiVersion: v2
     appVersion: latest
+    created: "2025-09-02T14:35:00.411248754Z"
+    description: A Helm chart for Kubernetes FIXEdge application
+    digest: 356fa73eaaae6246d2e327bf6155753bab360713e9e0a060c537a249fb1b1e38
+    home: https://github.com/epam/b2bits-helmcharts
+    keywords:
+    - fixedge-cpp
+    - fix
+    - trading
+    - financial
+    maintainers:
+    - email: SupportFIXAntenna@epam.com
+      name: EPAM
+    name: fixedge-cpp
+    sources:
+    - https://github.com/epam/b2bits-helmcharts
+    type: application
+    urls:
+    - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-cpp-0.0.2/fixedge-cpp-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: latest
     created: "2025-08-27T12:20:25.414039151Z"
     description: A Helm chart for Kubernetes FIXEdge application
     digest: 684377ab5bea9342fbf9bdf022acccd7871ff3f986019a37b833e5278a24fc9e
@@ -23,6 +44,30 @@ entries:
     - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-cpp-0.0.1/fixedge-cpp-0.0.1.tgz
     version: 0.0.1
   fixedge-cpp-with-h2-bundle:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-09-02T14:35:00.639172454Z"
+    description: A Helm chart for Kubernetes FIXEdge CPP with H2 and FixEye Agent bundle application
+    digest: 95a964a04fdfd8ede4b27e8a04959d91aa38dfb16de1f88374cc115a40385bfd
+    home: https://github.com/epam/b2bits-helmcharts
+    keywords:
+    - fixedge-cpp
+    - fixicc-h2
+    - fixeye-agent
+    - fix
+    - trading
+    - financial
+    - bundle
+    maintainers:
+    - email: SupportFIXAntenna@epam.com
+      name: EPAM
+    name: fixedge-cpp-with-h2-bundle
+    sources:
+    - https://github.com/epam/b2bits-helmcharts
+    type: application
+    urls:
+    - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-cpp-with-h2-bundle-0.0.3/fixedge-cpp-with-h2-bundle-0.0.3.tgz
+    version: 0.0.3
   - apiVersion: v2
     appVersion: latest
     created: "2025-09-02T14:09:41.052274384Z"
