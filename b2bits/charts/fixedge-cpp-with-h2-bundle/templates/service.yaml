@@ -1,0 +1,54 @@
+---
+# FIXEdge Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: fixedge
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: fixedge-cpp-with-h2-bundle
+  ports:
+    - name: fixedge-port
+      protocol: TCP
+      port: {{ .Values.fixedge.port }}
+      targetPort: {{ .Values.fixedge.port }}
+    - name: fixedge-admin
+      protocol: TCP
+      port: {{ .Values.fixedge.httpAdmPort }}
+      targetPort: {{ .Values.fixedge.httpAdmPort }}
+
+---
+# FIXICC Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: fixicc
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: fixedge-cpp-with-h2-bundle
+  ports:
+    - name: fixicc-port
+      protocol: TCP
+      port: {{ .Values.fixicc.port }}
+      targetPort: {{ .Values.fixicc.port }}
+
+---
+# FixEye Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: fixeye
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: fixedge-cpp-with-h2-bundle
+  ports:
+    - name: fixeye-port
+      protocol: TCP
+      port: {{ .Values.fixeye.port }}
+      targetPort: {{ .Values.fixeye.port }}
