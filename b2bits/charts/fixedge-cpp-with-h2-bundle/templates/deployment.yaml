@@ -79,13 +79,17 @@ spec:
         - containerPort: {{ .Values.fixedge.httpAdmPort }}
           protocol: TCP
         livenessProbe:
-          tcpSocket:
+          httpGet:
+            path: /service/started
             port: {{ .Values.fixedge.httpAdmPort }}
+            scheme: HTTPS
           initialDelaySeconds: {{ .Values.fixedge.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.fixedge.livenessProbe.periodSeconds }}
         readinessProbe:
-          tcpSocket:
-            port: {{ .Values.fixedge.port }}
+          httpGet:
+            path: /service/started
+            port: {{ .Values.fixedge.httpAdmPort }}
+            scheme: HTTPS
           initialDelaySeconds: {{ .Values.fixedge.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.fixedge.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.fixedge.readinessProbe.timeoutSeconds }}
