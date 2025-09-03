@@ -161,6 +161,31 @@ entries:
     urls:
     - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-java-0.0.1/fixedge-java-0.0.1.tgz
     version: 0.0.1
+  fixedge-java-with-h2-bundle:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-09-03T10:20:45.501218808Z"
+    description: A Helm chart for Kubernetes FIXEdge Java with H2 and FixEye Agent bundle application
+    digest: bbab1e5ad884e910e3c74cddf1815ecb5ffa083c349f5fec8159614542dd6ab8
+    home: https://github.com/epam/b2bits-helmcharts
+    keywords:
+    - fixedge-java
+    - fixicc-h2
+    - fixeye-agent
+    - fix
+    - trading
+    - financial
+    - bundle
+    maintainers:
+    - email: SupportFIXAntenna@epam.com
+      name: EPAM
+    name: fixedge-java-with-h2-bundle
+    sources:
+    - https://github.com/epam/b2bits-helmcharts
+    type: application
+    urls:
+    - https://github.com/epam/b2bits-helmcharts/releases/download/fixedge-java-with-h2-bundle-0.0.1/fixedge-java-with-h2-bundle-0.0.1.tgz
+    version: 0.0.1
   fixeye-agent:
   - apiVersion: v2
     appVersion: latest
