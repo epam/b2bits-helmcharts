@@ -1,0 +1,25 @@
+apiVersion: v2
+name: fixedge-java-with-h2-bundle
+description: A Helm chart for Kubernetes FIXEdge Java with H2 and FixEye Agent bundle application
+
+type: application
+
+version: 0.0.1
+appVersion: "latest"
+
+keywords:
+  - fixedge-java
+  - fixicc-h2
+  - fixeye-agent
+  - fix
+  - trading
+  - financial
+  - bundle
+
+home: https://github.com/epam/b2bits-helmcharts
+sources:
+  - https://github.com/epam/b2bits-helmcharts
+
+maintainers:
+  - name: EPAM
+    email: SupportFIXAntenna@epam.com

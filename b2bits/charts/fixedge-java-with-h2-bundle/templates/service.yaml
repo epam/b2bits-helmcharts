@@ -1,0 +1,54 @@
+---
+# FIXEdge Java Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: fixedge-java
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: fixedge-java-with-h2-bundle
+  ports:
+    - name: fixedge-java-port
+      protocol: TCP
+      port: {{ .Values.fixedge_java.port }}
+      targetPort: {{ .Values.fixedge_java.port }}
+    - name: fixedge-java-admin
+      protocol: TCP
+      port: {{ .Values.fixedge_java.httpAdmPort }}
+      targetPort: {{ .Values.fixedge_java.httpAdmPort }}
+
+---
+# FIXICC Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: fixicc
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: fixedge-java-with-h2-bundle
+  ports:
+    - name: fixicc-port
+      protocol: TCP
+      port: {{ .Values.fixicc.port }}
+      targetPort: {{ .Values.fixicc.port }}
+
+---
+# FixEye Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: fixeye
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: fixedge-java-with-h2-bundle
+  ports:
+    - name: fixeye-port
+      protocol: TCP
+      port: {{ .Values.fixeye.port }}
+      targetPort: {{ .Values.fixeye.port }}

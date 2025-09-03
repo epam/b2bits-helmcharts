@@ -1,0 +1,135 @@
+---
+# FIXEdge Java Configs PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixedge-java-configs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixedge_java.storage.accessModes }}
+  {{- if .Values.fixedge_java.storage.class }}
+  storageClassName: {{ .Values.fixedge_java.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixedge_java.storage.fe_java_configs.size }}
+
+---
+# FIXEdge Java Session Logs PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixedge-java-session-logs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixedge_java.storage.accessModes }}
+  {{- if .Values.fixedge_java.storage.class }}
+  storageClassName: {{ .Values.fixedge_java.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixedge_java.storage.fe_java_sessions_logs.size }}
+
+---
+# FIXEdge Java App Logs PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixedge-java-app-logs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixedge_java.storage.accessModes }}
+  {{- if .Values.fixedge_java.storage.class }}
+  storageClassName: {{ .Values.fixedge_java.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixedge_java.storage.fe_java_app_logs.size }}
+
+---
+# FIXICC Configs PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixicc-configs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixicc.storage.accessModes }}
+  {{- if .Values.fixicc.storage.class }}
+  storageClassName: {{ .Values.fixicc.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixicc.storage.fixicc_configs.size }}
+
+---
+# FIXICC Logs PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixicc-logs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixicc.storage.accessModes }}
+  {{- if .Values.fixicc.storage.class }}
+  storageClassName: {{ .Values.fixicc.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixicc.storage.fixicc_logs.size }}
+
+---
+# FixEye Configs PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixeye-configs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixeye.storage.accessModes }}
+  {{- if .Values.fixeye.storage.class }}
+  storageClassName: {{ .Values.fixeye.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixeye.storage.configs.size }}
+
+---
+# FixEye Samples PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixeye-samples-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixeye.storage.accessModes }}
+  {{- if .Values.fixeye.storage.class }}
+  storageClassName: {{ .Values.fixeye.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixeye.storage.samples.size }}
+
+---
+# FixEye Logs PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fixeye-logs-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.fixeye.storage.accessModes }}
+  {{- if .Values.fixeye.storage.class }}
+  storageClassName: {{ .Values.fixeye.storage.class }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.fixeye.storage.logs.size }}

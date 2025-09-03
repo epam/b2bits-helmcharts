@@ -1,0 +1,108 @@
+# FIXEdge Java with H2 and FixEye Agent Bundle subchart values
+# These values can be overridden from the parent chart
+
+force_init_configs: false
+git_configs:
+  url: https://github.com/epam/b2bits-configuration-samples.git
+  branch: main
+
+imagePullSecrets: []
+
+# FIXEdge Java configuration
+fixedge_java:
+  image:
+    url: b2bitsepam/fixedge-java
+    version: latest
+    imagePullPolicy: Always
+  port: 8911
+  httpAdmPort: 9010
+  livenessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 1Gi
+    limits:
+      cpu: 0.5
+      memory: 1Gi
+  storage:
+    class: "gp2"
+    accessModes: ReadWriteOnce
+    fe_java_configs:
+      size: 1Gi
+    fe_java_sessions_logs:
+      size: 10Gi
+    fe_java_app_logs:
+      size: 10Gi
+
+# FIXICC H2 configuration
+fixicc:
+  image:
+    url: b2bitsepam/fixicc-h2
+    version: latest
+    imagePullPolicy: Always
+  port: 8080
+  livenessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 10
+    failureThreshold: 5
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 10
+    failureThreshold: 5
+  resources:
+    requests:
+      cpu: 1
+      memory: 2Gi
+    limits:
+      cpu: 1
+      memory: 2Gi
+  storage:
+    class: "gp2"
+    accessModes: ReadWriteOnce
+    fixicc_configs:
+      size: 1Gi
+    fixicc_logs:
+      size: 10Gi
+
+# FixEye Agent configuration
+fixeye:
+  image:
+    url: b2bitsepam/fixeye-agent
+    version: latest
+    imagePullPolicy: Always
+  port: 8882
+  livenessProbe:
+    initialDelaySeconds: 15
+    periodSeconds: 20
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 500Mi
+    limits:
+      cpu: 0.5
+      memory: 500Mi
+  storage:
+    class: "gp2"
+    accessModes: ReadWriteOnce
+    configs:
+      size: 1Gi
+    samples:
+      size: 1Gi
+    logs:
+      size: 10Gi
