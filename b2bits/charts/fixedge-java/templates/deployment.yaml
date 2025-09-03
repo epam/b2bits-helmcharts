@@ -56,17 +56,23 @@ spec:
         - containerPort: {{ .Values.fixedge_java.httpAdmPort }}
           protocol: TCP
         livenessProbe:
-          tcpSocket:
-            port: {{ .Values.fixedge_java.httpAdmPort }}
-          initialDelaySeconds: {{ .Values.fixedge_java.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.fixedge_java.livenessProbe.periodSeconds }}
+          httpGet:
+            path: /service/started
+            port: 9010
+            scheme: HTTPS
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
         readinessProbe:
-          tcpSocket:
-            port: {{ .Values.fixedge_java.port }}
-          initialDelaySeconds: {{ .Values.fixedge_java.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.fixedge_java.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.fixedge_java.readinessProbe.timeoutSeconds }}
-          failureThreshold: {{ .Values.fixedge_java.readinessProbe.failureThreshold }}
+          httpGet:
+            path: /service/started
+            port: 9010
+            scheme: HTTPS
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
         volumeMounts:
         - name: fixaj2-license-file
           mountPath: /etc/fixedge-java/fixaj2-license.bin
@@ -77,7 +83,7 @@ spec:
         - name: fixedge-java-configs-data
           mountPath: /etc/fixedge-java
         - name: fixedge-java-session-logs-data
-          mountPath: /var/lib/fixedge-java
+          mountPath: /var/data/fixedge-java
         - name: fixedge-java-app-logs-data
           mountPath: /var/log/fixedge-java
         securityContext:
@@ -93,10 +99,10 @@ spec:
           limits:
             cpu: 0.2
             memory: 100Mi
-        command: ['sh', '-c', 'while true; do find /var/lib/fixedge-java/archive -name "*.log" -mtime +7 -delete 2>/dev/null || true; sleep 24h; done']
+        command: ['sh', '-c', 'while true; do find /var/data/fixedge-java/archive -name "*.log" -mtime +7 -delete 2>/dev/null || true; sleep 24h; done']
         volumeMounts: 
         - name: fixedge-java-session-logs-data
-          mountPath: /var/lib/fixedge-java
+          mountPath: /var/data/fixedge-java
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -159,10 +165,10 @@ spec:
             limits:
               cpu: 0.2
               memory: 100Mi
-          command: ['sh', '-c', 'mkdir -p /var/lib/fixedge-java/archive']
+          command: ['sh', '-c', 'mkdir -p /var/data/fixedge-java/archive']
           volumeMounts: 
             - name: fixedge-java-session-logs-data
-              mountPath: /var/lib/fixedge-java
+              mountPath: /var/data/fixedge-java
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
